@@ -2,7 +2,6 @@ import logging
 from typing import Any, Dict, List
 
 from .base import BaseGenerator
-from .factory import GeneratorFactory
 
 logger = logging.getLogger("airbyte")
 
@@ -17,9 +16,16 @@ class CompositeGenerator(BaseGenerator):
     
     def __init__(self, seed: str = "default", **config):
         super().__init__(seed, **config)
-        self.generator_factory = GeneratorFactory(seed)
+        self._generator_factory = None
         self._sub_generators: List[BaseGenerator] = []
         self._initialize_sub_generators()
+    
+    def _get_generator_factory(self):
+        """Get or create the generator factory."""
+        if self._generator_factory is None:
+            from .factory import GeneratorFactory
+            self._generator_factory = GeneratorFactory(self.seed)
+        return self._generator_factory
     
     def _initialize_sub_generators(self):
         """Initialize the sub-generators based on configuration."""
@@ -39,7 +45,7 @@ class CompositeGenerator(BaseGenerator):
                     'generator_config': generator_config
                 }
                 
-                generator = self.generator_factory.get_generator(
+                generator = self._get_generator_factory().get_generator(
                     f"composite_{i}",
                     f"transform_{i}",
                     column_config
@@ -95,7 +101,7 @@ class CompositeGenerator(BaseGenerator):
                 'generator_config': generator_config
             }
             
-            generator = self.generator_factory.get_generator(
+            generator = self._get_generator_factory().get_generator(
                 f"composite_{len(self._sub_generators)}",
                 f"transform_{len(self._sub_generators)}",
                 column_config
@@ -163,10 +169,17 @@ class LinkedGenerator(BaseGenerator):
     
     def __init__(self, seed: str = "default", **config):
         super().__init__(seed, **config)
-        self.generator_factory = GeneratorFactory(seed)
+        self._generator_factory = None
         self._linked_generators: Dict[str, BaseGenerator] = {}
         self._link_mappings: Dict[str, Dict[str, Any]] = {}
         self._initialize_linked_generators()
+    
+    def _get_generator_factory(self):
+        """Get or create the generator factory."""
+        if self._generator_factory is None:
+            from .factory import GeneratorFactory
+            self._generator_factory = GeneratorFactory(self.seed)
+        return self._generator_factory
     
     def _initialize_linked_generators(self):
         """Initialize generators for each linked field."""
@@ -186,7 +199,7 @@ class LinkedGenerator(BaseGenerator):
                     'generator_config': generator_config
                 }
                 
-                generator = self.generator_factory.get_generator(
+                generator = self._get_generator_factory().get_generator(
                     f"linked_{field_name}",
                     field_name,
                     column_config
