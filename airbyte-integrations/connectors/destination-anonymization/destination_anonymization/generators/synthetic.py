@@ -1,6 +1,7 @@
 import hashlib
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Optional
+
 from faker import Faker
 
 from .base import BaseGenerator
@@ -153,14 +154,14 @@ class FakeDateGenerator(BaseGenerator):
             fake_date = self.faker.date_between(start_date=start_dt, end_date=end_dt)
             
             if preserve_format:
-                return self._format_date_like_original(fake_date, str(value))
+                return self._format_date_like_original(datetime.combine(fake_date, datetime.min.time()), str(value))
             else:
                 return fake_date.strftime('%Y-%m-%d')
                 
         except Exception:
             return self._generate_random_date()
     
-    def _parse_date(self, date_str: str) -> datetime:
+    def _parse_date(self, date_str: str) -> Optional[datetime]:
         """
         Try to parse a date string using common formats.
         

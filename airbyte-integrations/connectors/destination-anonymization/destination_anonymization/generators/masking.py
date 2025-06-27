@@ -1,5 +1,5 @@
-import re
 import hashlib
+import re
 from typing import Any
 
 from .base import BaseGenerator

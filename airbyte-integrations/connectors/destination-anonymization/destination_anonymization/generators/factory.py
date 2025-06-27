@@ -1,13 +1,14 @@
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Type
 
 from .base import BaseGenerator
-from .masking import EmailMaskingGenerator, PhoneMaskingGenerator, SSNMaskingGenerator
-from .synthetic import FakeNameGenerator, FakeAddressGenerator, FakeDateGenerator
-from .numeric import NumericShiftGenerator
 from .categorical import CategoricalMapGenerator
-from .primary_key import PrimaryKeyGenerator, ForeignKeyGenerator
 from .composite import CompositeGenerator, LinkedGenerator
+from .masking import EmailMaskingGenerator, PhoneMaskingGenerator, SSNMaskingGenerator
+from .numeric import NumericShiftGenerator
+from .primary_key import ForeignKeyGenerator, PrimaryKeyGenerator
+from .synthetic import FakeAddressGenerator, FakeDateGenerator, FakeNameGenerator
+
 
 logger = logging.getLogger("airbyte")
 
@@ -28,9 +29,9 @@ class GeneratorFactory:
             seed: Default seed for generator consistency
         """
         self.seed = seed
-        self._generators = {}
+        self._generators: Dict[str, BaseGenerator] = {}
         
-        self._generator_types = {
+        self._generator_types: Dict[str, Type[BaseGenerator]] = {
             "mask_email": EmailMaskingGenerator,
             "mask_phone": PhoneMaskingGenerator,
             "mask_ssn": SSNMaskingGenerator,
@@ -77,7 +78,7 @@ class GeneratorFactory:
             raise ValueError(f"Unsupported generator type: {generator_type}")
         
         generator_class = self._generator_types[generator_type]
-        generator = generator_class(seed=self.seed, **generator_config)
+        generator: BaseGenerator = generator_class(seed=self.seed, **generator_config)
         
         self._generators[generator_key] = generator
         

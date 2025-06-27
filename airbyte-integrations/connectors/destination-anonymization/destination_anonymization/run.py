@@ -1,4 +1,5 @@
 import sys
+
 from .destination import DestinationAnonymization
 
 

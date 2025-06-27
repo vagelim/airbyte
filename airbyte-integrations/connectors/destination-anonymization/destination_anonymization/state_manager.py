@@ -1,7 +1,8 @@
 import hashlib
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
+
 
 logger = logging.getLogger("airbyte")
 
@@ -185,7 +186,7 @@ class StateManager:
         
         sample_keys = list(cache.keys())[:sample_size]
         
-        validation_results = {
+        validation_results: Dict[str, Any] = {
             'valid': True,
             'total_values': len(cache),
             'sampled_values': len(sample_keys),
@@ -195,13 +196,17 @@ class StateManager:
         
         for key in sample_keys:
             if cache[key] is None:
-                validation_results['inconsistencies'].append({
-                    'key': key,
-                    'issue': 'Null transformed value'
-                })
+                inconsistencies_list = validation_results['inconsistencies']
+                if isinstance(inconsistencies_list, list):
+                    inconsistencies_list.append({
+                        'key': key,
+                        'issue': 'Null transformed value'
+                    })
                 validation_results['valid'] = False
         
         if not validation_results['valid']:
-            validation_results['message'] = f"Found {len(validation_results['inconsistencies'])} inconsistencies"
+            inconsistencies_list = validation_results['inconsistencies']
+            if isinstance(inconsistencies_list, list):
+                validation_results['message'] = f"Found {len(inconsistencies_list)} inconsistencies"
         
         return validation_results

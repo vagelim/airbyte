@@ -4,10 +4,10 @@ from typing import Any, Dict, Iterable, Mapping
 
 from airbyte_cdk.destinations import Destination
 from airbyte_cdk.models import AirbyteConnectionStatus, AirbyteMessage, ConfiguredAirbyteCatalog, Status, Type
-from airbyte_cdk.models.airbyte_protocol import DestinationSyncMode
 
 from .anonymization_engine import AnonymizationEngine
 from .config import AnonymizationConfig
+
 
 logger = logging.getLogger("airbyte")
 

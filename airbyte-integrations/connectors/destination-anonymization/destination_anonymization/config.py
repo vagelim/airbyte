@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Dict, Mapping, Optional
 
+
 logger = logging.getLogger("airbyte")
 
 

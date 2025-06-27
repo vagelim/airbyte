@@ -1,0 +1,46 @@
+{
+  "anonymization_rules": {
+    "streams": {
+      "users": {
+        "columns": {
+          "email": {
+            "generator_type": "mask_email",
+            "consistency_key": "user_email"
+          },
+          "first_name": {
+            "generator_type": "fake_name",
+            "generator_config": {
+              "name_type": "first_name"
+            },
+            "consistency_key": "user_name"
+          },
+          "last_name": {
+            "generator_type": "fake_name",
+            "generator_config": {
+              "name_type": "last_name"
+            },
+            "consistency_key": "user_name"
+          },
+          "phone": {
+            "generator_type": "mask_phone",
+            "generator_config": {
+              "preserve_last_digits": 4
+            }
+          },
+          "ssn": {
+            "generator_type": "mask_ssn"
+          },
+          "salary": {
+            "generator_type": "numeric_shift",
+            "generator_config": {
+              "transform_type": "noise",
+              "noise_percentage": 0.1
+            }
+          }
+        }
+      }
+    }
+  },
+  "preserve_referential_integrity": true,
+  "consistency_seed": "test_seed_123"
+}

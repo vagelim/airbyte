@@ -1,7 +1,8 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from .base import BaseGenerator
+
 
 logger = logging.getLogger("airbyte")
 
@@ -84,7 +85,7 @@ class CompositeGenerator(BaseGenerator):
         
         return current_value
     
-    def add_transformation(self, generator_type: str, generator_config: Dict[str, Any] = None):
+    def add_transformation(self, generator_type: str, generator_config: Optional[Dict[str, Any]] = None):
         """
         Add a new transformation to the composite generator.
         
@@ -296,20 +297,23 @@ class LinkedGenerator(BaseGenerator):
         Returns:
             Dictionary with link statistics
         """
-        stats = {
+        stats: Dict[str, Any] = {
             'linked_fields': list(self._linked_generators.keys()),
             'total_links': 0,
             'field_stats': {}
         }
         
         for field_name, mappings in self._link_mappings.items():
-            field_count = len(mappings)
-            stats['field_stats'][field_name] = field_count
-            stats['total_links'] += field_count
+            if isinstance(mappings, dict):
+                field_count = len(mappings)
+                if isinstance(stats['field_stats'], dict):
+                    stats['field_stats'][field_name] = field_count
+                if isinstance(stats['total_links'], int):
+                    stats['total_links'] += field_count
         
         return stats
     
-    def clear_link_cache(self, field_name: str = None):
+    def clear_link_cache(self, field_name: Optional[str] = None):
         """
         Clear cached linked values.
         

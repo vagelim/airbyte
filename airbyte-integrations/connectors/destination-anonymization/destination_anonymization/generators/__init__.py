@@ -1,11 +1,12 @@
 from .base import BaseGenerator
+from .categorical import CategoricalMapGenerator
+from .composite import CompositeGenerator, LinkedGenerator
 from .factory import GeneratorFactory
 from .masking import EmailMaskingGenerator, PhoneMaskingGenerator, SSNMaskingGenerator
-from .synthetic import FakeNameGenerator, FakeAddressGenerator, FakeDateGenerator
 from .numeric import NumericShiftGenerator
-from .categorical import CategoricalMapGenerator
-from .primary_key import PrimaryKeyGenerator, ForeignKeyGenerator
-from .composite import CompositeGenerator, LinkedGenerator
+from .primary_key import ForeignKeyGenerator, PrimaryKeyGenerator
+from .synthetic import FakeAddressGenerator, FakeDateGenerator, FakeNameGenerator
+
 
 __all__ = [
     "BaseGenerator",

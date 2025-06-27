@@ -1,7 +1,7 @@
 import hashlib
 import random
 import uuid
-from typing import Any, Set
+from typing import Any, Optional, Set
 
 from .base import BaseGenerator
 
@@ -193,7 +193,7 @@ class ForeignKeyGenerator(BaseGenerator):
     def __init__(self, seed: str = "default", **config):
         super().__init__(seed, **config)
         self._fk_mapping: dict = {}
-        self._referenced_pk_generator = None
+        self._referenced_pk_generator: Optional[PrimaryKeyGenerator] = None
     
     def set_referenced_pk_generator(self, pk_generator: PrimaryKeyGenerator):
         """
@@ -230,6 +230,7 @@ class ForeignKeyGenerator(BaseGenerator):
             hash_value = hashlib.md5(hash_input.encode()).hexdigest()[:8]
             
             preserve_type = self.config.get('preserve_type', True)
+            anonymized_fk: Any
             if preserve_type and isinstance(value, int):
                 anonymized_fk = int(hash_value, 16) % 1000000  # Keep it reasonable
             else:

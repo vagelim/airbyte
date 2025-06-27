@@ -7,6 +7,7 @@ from .config import AnonymizationConfig
 from .generators import GeneratorFactory
 from .state_manager import StateManager
 
+
 logger = logging.getLogger("airbyte")
 
 
@@ -52,11 +53,14 @@ class AnonymizationEngine:
         if not stream_config or not stream_config.get("columns"):
             return message
         
-        anonymized_data = self._anonymize_record_data(
-            record_data, 
-            stream_name, 
-            stream_config
-        )
+        if isinstance(record_data, dict):
+            anonymized_data = self._anonymize_record_data(
+                record_data, 
+                stream_name, 
+                stream_config
+            )
+        else:
+            anonymized_data = {}
         
         anonymized_record = AirbyteRecordMessage(
             stream=stream_name,
