@@ -6,6 +6,8 @@ from .masking import EmailMaskingGenerator, PhoneMaskingGenerator, SSNMaskingGen
 from .synthetic import FakeNameGenerator, FakeAddressGenerator, FakeDateGenerator
 from .numeric import NumericShiftGenerator
 from .categorical import CategoricalMapGenerator
+from .primary_key import PrimaryKeyGenerator, ForeignKeyGenerator
+from .composite import CompositeGenerator, LinkedGenerator
 
 logger = logging.getLogger("airbyte")
 
@@ -37,6 +39,10 @@ class GeneratorFactory:
             "fake_date": FakeDateGenerator,
             "numeric_shift": NumericShiftGenerator,
             "categorical_map": CategoricalMapGenerator,
+            "primary_key": PrimaryKeyGenerator,
+            "foreign_key": ForeignKeyGenerator,
+            "composite": CompositeGenerator,
+            "linked": LinkedGenerator,
         }
     
     def get_generator(

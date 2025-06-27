@@ -4,6 +4,8 @@ from .masking import EmailMaskingGenerator, PhoneMaskingGenerator, SSNMaskingGen
 from .synthetic import FakeNameGenerator, FakeAddressGenerator, FakeDateGenerator
 from .numeric import NumericShiftGenerator
 from .categorical import CategoricalMapGenerator
+from .primary_key import PrimaryKeyGenerator, ForeignKeyGenerator
+from .composite import CompositeGenerator, LinkedGenerator
 
 __all__ = [
     "BaseGenerator",
@@ -15,5 +17,9 @@ __all__ = [
     "FakeAddressGenerator", 
     "FakeDateGenerator",
     "NumericShiftGenerator",
-    "CategoricalMapGenerator"
+    "CategoricalMapGenerator",
+    "PrimaryKeyGenerator",
+    "ForeignKeyGenerator",
+    "CompositeGenerator",
+    "LinkedGenerator"
 ]
